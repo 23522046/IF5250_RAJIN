@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_take_attendance"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="50dp"
+    >
+
+    <fragment
+        android:layout_weight="1"
+        android:id="@+id/map_fragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+            tools:context=".ui.TakeAttendanceActivity"
+            tools:layout="@layout/fragment_history_presence"
+             />
+
+    <Button
+        android:drawableLeft="@drawable/ic_gps"
+        android:drawableTint="@color/white"
+        android:backgroundTint="@color/teal_200"
+        android:id="@+id/btRefreshLoc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:text="REFRESH LOKASI" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="30dp"
+        android:layout_marginHorizontal="16dp"
+        >
+
+        <TextView
+            android:layout_marginLeft="8dp"
+            style="@style/AppTheme.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PILIH STATUS" />
+
+        <RadioGroup
+
+            android:id="@+id/rg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:checked="true"
+                android:id="@+id/rbWfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="WFO (Work From Office)" />
+
+            <RadioButton
+                android:id="@+id/rbWfh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="WFH (Work From Home)" />
+        </RadioGroup>
+
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+    <TextView
+        android:visibility="gone"
+        style="@style/AppTheme.Title"
+        android:id="@+id/output_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        tools:text="@string/app_name"
+        android:padding="8dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:layout_marginHorizontal="16dp"
+            android:id="@+id/btPresensi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PRESENSI"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:backgroundTint="@android:color/darker_gray"
+            android:layout_marginHorizontal="16dp"
+            android:id="@+id/btCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="BATAL"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>
