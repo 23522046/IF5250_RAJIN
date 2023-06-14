@@ -5,6 +5,7 @@ import android.location.Location
 import androidx.core.content.edit
 import com.google.firebase.Timestamp
 import org.informatika.if5250rajinapps.R
+import org.informatika.if5250rajinapps.model.Pengajuan
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -30,6 +31,12 @@ val Timestamp?.formattedTimeOnly: String
     get() {
         val sfd = SimpleDateFormat("HH:mm:ss")
         return sfd.format(this?.toDate()?.time?.let { Date(it) })
+    }
+
+val String?.toDateOnly: Date
+    get() {
+        val format = SimpleDateFormat("yyyy-MM-dd")
+        return format.parse(this)
     }
 
 internal object SharedPreferenceUtil {
@@ -64,3 +71,6 @@ fun Location?.toText(): String {
         "Unknown location"
     }
 }
+
+fun dokPendukungPath(pengajuan: Pengajuan) =
+    "pengajuan/${pengajuan.sampaiTgl!!.toDate().formattedYMD}_${pengajuan.mulaiTgl!!.toDate().formattedYMD}_${pengajuan.uid}.jpg"

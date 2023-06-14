@@ -53,25 +53,25 @@ class MenuActivity : AppCompatActivity() {
 
         // Now set all the FABs and all the action name
         // texts as GONE
-        binding.addAlarmFab.setVisibility(View.GONE)
-        binding.addPersonFab.setVisibility(View.GONE)
+        binding.fabAddRequest.visibility = View.GONE
+        binding.fabTakeAttendance.visibility = View.GONE
 
 
 
         // Set the Extended floating action button to
         // shrinked state initially
-        binding.addFab.shrink()
-        binding.addFab.setOnClickListener {
+        binding.fabClose.shrink()
+        binding.fabClose.setOnClickListener {
             updateAllFabVisible()
         }
 
-        binding.addPersonFab.setOnClickListener {
+        binding.fabTakeAttendance.setOnClickListener {
             updateAllFabVisible()
             val intent = Intent(this, TakeAttendanceActivity::class.java)
             startActivity(intent)
         }
 
-        binding.addAlarmFab.setOnClickListener {
+        binding.fabAddRequest.setOnClickListener {
             updateAllFabVisible()
             val intent = Intent(this, RequestActivity::class.java)
             startActivity(intent)
@@ -88,42 +88,20 @@ class MenuActivity : AppCompatActivity() {
     private fun updateAllFabVisible() {
         isAllFabsVisible = if (!isAllFabsVisible!!) {
 
-            // when isAllFabsVisible becomes
-            // true make all the action name
-            // texts and FABs VISIBLE.
-            binding.addAlarmFab.show()
+            binding.fabAddRequest.show()
 
 
             if (!alreadyCheckout) {
-                binding.addPersonFab.show()
+                binding.fabTakeAttendance.show()
             }
 
-            // Now extend the parent FAB, as
-            // user clicks on the shrinked
-            // parent FAB
-            binding.addFab.extend()
-
-            // make the boolean variable true as
-            // we have set the sub FABs
-            // visibility to GONE
+            binding.fabClose.extend()
             true
         } else {
 
-            // when isAllFabsVisible becomes
-            // true make all the action name
-            // texts and FABs GONE.
-            binding.addAlarmFab.hide()
-            binding.addPersonFab.hide()
-
-
-
-            // Set the FAB to shrink after user
-            // closes all the sub FABs
-            binding.addFab.shrink()
-
-            // make the boolean variable false
-            // as we have set the sub FABs
-            // visibility to GONE
+            binding.fabTakeAttendance.hide()
+            binding.fabAddRequest.hide()
+            binding.fabClose.shrink()
             false
         }
     }

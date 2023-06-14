@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         Log.d(TAG, "onCreate: ${Firebase.auth.currentUser?.uid}")
         if (mAuth.currentUser!=null){
-            moveToMenuActivity(mAuth.currentUser!!.uid)
+            moveToMenuActivity()
         }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 
                 if (it.isSuccessful) {
                     Toast.makeText(applicationContext, "Login successful", Toast.LENGTH_SHORT).show()
-                    moveToMenuActivity(it.result.user!!.uid)
+                    moveToMenuActivity()
                 } else {
                     Snackbar.make(
                         findViewById(R.id.activity_main),
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    private fun moveToMenuActivity(uid: String) {
+    private fun moveToMenuActivity() {
         // Enable Firestore logging
         FirebaseFirestore.setLoggingEnabled(true)
 

@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
@@ -15,16 +14,15 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
@@ -51,7 +49,7 @@ class TakeAttendanceActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityTakeAttendanceBinding
     private var currentPosition: LatLng? = null
-    private var polygons : List<List<LatLng>>?  = null
+    private var polygons: List<List<LatLng>>? = null
 
     private var foregroundOnlyLocationServiceBound = false
 
@@ -118,8 +116,12 @@ class TakeAttendanceActivity : AppCompatActivity(), OnMapReadyCallback,
         }
 
         binding.btPresensi.setOnClickListener {
-            if (currentPosition==null){
-                Snackbar.make(findViewById(R.id.activity_take_attendance), "Mohon menunggu, lokasi anda masih belum ditemukan.", Snackbar.LENGTH_LONG).show()
+            if (currentPosition == null) {
+                Snackbar.make(
+                    findViewById(R.id.activity_take_attendance),
+                    "Mohon menunggu, lokasi anda masih belum ditemukan.",
+                    Snackbar.LENGTH_LONG
+                ).show()
                 requestLocationUpdate()
             } else {
                 cekBtPresensiVisibility()
@@ -127,9 +129,9 @@ class TakeAttendanceActivity : AppCompatActivity(), OnMapReadyCallback,
         }
 
         val rgJenis = binding.rg
-        rgJenis.setOnCheckedChangeListener { radioGroup, i ->
-            val jenis = if (binding.rg.checkedRadioButtonId==R.id.rbWfo) "wfo" else "wfh"
-            if (jenis=="wfh"){
+        rgJenis.setOnCheckedChangeListener { _, _ ->
+            val jenis = if (binding.rg.checkedRadioButtonId == R.id.rbWfo) "wfo" else "wfh"
+            if (jenis == "wfh") {
                 binding.btPresensi.isEnabled = true
                 binding.btPresensi.text = "PRESENSI"
             }
@@ -137,57 +139,88 @@ class TakeAttendanceActivity : AppCompatActivity(), OnMapReadyCallback,
 
         requestLocationUpdate()
 
-        viewModel.presensi.observe(this,  {
+        viewModel.presensi.observe(this) {
             Log.d(TAG, "presensi : $it")
             binding.btPresensi.text = "MASUK"
-            if (it!=null){
+            if (it != null) {
 
-                rgJenis.check(if (it.jenis=="wfo") R.id.rbWfo else R.id.rbWfh)
+                rgJenis.check(if (it.jenis == "wfo") R.id.rbWfo else R.id.rbWfh)
                 binding.cardView3.visibility = View.INVISIBLE
                 binding.btPresensi.text = "PULANG"
             }
-        })
+        }
 
-        viewModel.unitKerja.observe(this, {
-            if (it!=null){
-                for (option in getPolylineOptionsList(it!!.batasWilayah!!)){
+        viewModel.unitKerja.observe(this) {
+            if (it != null) {
+                for (option in getPolylineOptionsList(it!!.batasWilayah!!)) {
                     mMap.addPolyline(option)
                 }
                 polygons = getPolygons(it!!.batasWilayah!!)
             }
-        })
+        }
     }
 
     private fun actionPresensi() {
 
-        // TODO: salah jangan diobserve, jadi update koding terus blok
+        // TODO: salah jangan diobserve, jadi update koding terus blFok
         val it = viewModel.presensi.value
-        if (it==null){
+        if (it == null) {
             var mAuth = FirebaseAuth.getInstance()
-            if (mAuth.currentUser==null) throw Exception("Anda belum login")
+            if (mAuth.currentUser == null) throw Exception("Anda belum login")
 
-            val jenis = if (binding.rg.checkedRadioButtonId==R.id.rbWfo) "wfo" else "wfh"
-            val checkIn = Cek(waktu = Timestamp.now(), isMockLocation = false, GeoPoint(currentPosition!!.latitude, currentPosition!!.longitude))
-            val p = Presence(UID = mAuth.uid, jenis = jenis, ket = null, checkIn = checkIn, checkOut = null, isLembur = false, timeCreate = Timestamp.now(), timeUpdate = Timestamp.now())
+            val jenis = if (binding.rg.checkedRadioButtonId == R.id.rbWfo) "wfo" else "wfh"
+            val checkIn = Cek(
+                waktu = Timestamp.now(),
+                isMockLocation = false,
+                GeoPoint(currentPosition!!.latitude, currentPosition!!.longitude)
+            )
+            val p = Presence(
+                UID = mAuth.uid,
+                jenis = jenis,
+                ket = null,
+                checkIn = checkIn,
+                checkOut = null,
+                isLembur = false,
+                timeCreate = Timestamp.now(),
+                timeUpdate = Timestamp.now()
+            )
             viewModel.presensiMasuk(p)
 
             onBackPressedDispatcher.onBackPressed()
             Toast.makeText(applicationContext, "Berhasil presensi masuk", Toast.LENGTH_SHORT).show()
         } else {
 
-            val checkOut = Cek(waktu = Timestamp.now(), isMockLocation = false, GeoPoint(currentPosition!!.latitude, currentPosition!!.longitude))
-            val p = Presence(UID = it.UID, jenis = it.jenis, ket = it.ket, checkIn = it.checkIn, checkOut = checkOut, isLembur = it.isLembur, timeCreate = it.timeCreate, timeUpdate = Timestamp.now())
+            val checkOut = Cek(
+                waktu = Timestamp.now(),
+                isMockLocation = false,
+                GeoPoint(currentPosition!!.latitude, currentPosition!!.longitude)
+            )
+            val p = Presence(
+                UID = it.UID,
+                jenis = it.jenis,
+                ket = it.ket,
+                checkIn = it.checkIn,
+                checkOut = checkOut,
+                isLembur = it.isLembur,
+                timeCreate = it.timeCreate,
+                timeUpdate = Timestamp.now()
+            )
             viewModel.presensiPulang(p)
 
             onBackPressedDispatcher.onBackPressed()
-            Toast.makeText(applicationContext, "Berhasil presensi pulang", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "Berhasil presensi pulang", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
     private fun requestLocationUpdate() {
 
-        if (!gpsEnabled()){
-            Snackbar.make(findViewById(R.id.activity_take_attendance), "Mohon aktifkan GPS anda.", Snackbar.LENGTH_LONG).setAction(R.string.ok) {
+        if (!gpsEnabled()) {
+            Snackbar.make(
+                findViewById(R.id.activity_take_attendance),
+                "Mohon aktifkan GPS anda.",
+                Snackbar.LENGTH_LONG
+            ).setAction(R.string.ok) {
                 // Request permission
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(intent);
@@ -248,7 +281,6 @@ class TakeAttendanceActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
 
-
     // TODO: Step 1.0, Review Permissions: Method checks if permissions approved.
     private fun foregroundPermissionApproved(): Boolean {
         return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
@@ -292,7 +324,7 @@ class TakeAttendanceActivity : AppCompatActivity(), OnMapReadyCallback,
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         Log.d(TAG, "onRequestPermissionResult")
@@ -314,7 +346,7 @@ class TakeAttendanceActivity : AppCompatActivity(), OnMapReadyCallback,
                         R.string.permission_denied_explanation,
                         Snackbar.LENGTH_LONG
                     )
-                        .setAction(R.string.settings) {
+                        .setAction(R.string.request) {
                             // Build intent that displays the App settings screen.
                             val intent = Intent()
                             intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -356,13 +388,14 @@ class TakeAttendanceActivity : AppCompatActivity(), OnMapReadyCallback,
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
+
     private fun getPolylineOptionsList(batasWilayah: List<Wilayah>): List<PolylineOptions> {
 
         var polylineOptionsList = mutableListOf<PolylineOptions>()
 
-        for (w in batasWilayah){
+        for (w in batasWilayah) {
             var polylines = mutableListOf<LatLng>()
-            for (p in w.polygons!!){
+            for (p in w.polygons!!) {
                 val latLng = LatLng(p.latitude, p.longitude)
                 polylines.add(latLng)
             }
@@ -378,9 +411,9 @@ class TakeAttendanceActivity : AppCompatActivity(), OnMapReadyCallback,
     private fun getPolygons(batasWilayah: List<Wilayah>): List<List<LatLng>> {
         var polygons = mutableListOf<List<LatLng>>()
 
-        for (w in batasWilayah){
+        for (w in batasWilayah) {
             var polygon = mutableListOf<LatLng>()
-            for (p in w.polygons!!){
+            for (p in w.polygons!!) {
                 val latLng = LatLng(p.latitude, p.longitude)
                 polygon.add(latLng)
             }
@@ -429,7 +462,11 @@ class TakeAttendanceActivity : AppCompatActivity(), OnMapReadyCallback,
                 if (isWithin) {
                     actionPresensi()
                 } else {
-                    Snackbar.make(findViewById(R.id.activity_take_attendance), "Mohon maaf, presensi WFO hanya bisa dilakukan di dalam area kerja.", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(
+                        findViewById(R.id.activity_take_attendance),
+                        "Mohon maaf, presensi WFO hanya bisa dilakukan di dalam area kerja.",
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
             }
         } else {

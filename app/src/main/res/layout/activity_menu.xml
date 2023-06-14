@@ -30,7 +30,7 @@
         app:navGraph="@navigation/mobile_navigation" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/add_fab"
+        android:id="@+id/fabClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
@@ -38,62 +38,41 @@
         android:layout_marginBottom="80dp"
         android:backgroundTint="@color/pink"
         android:textColor="@color/white"
-        android:text="TUTUP"
+        android:text="@string/close"
         app:icon="@drawable/ic_add"
         app:iconTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!--Floating action button for add alarm-->
-    <!--Make sure that you are constraining this
-        button to the parent button-->
-    <!--Make sure to add backgroundTint attribute to match
-         the entire application color-->
-    <!--because after changing the base application theme the color
-         of the FAB is set Blue as default-->
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/add_alarm_fab"
+        android:id="@+id/fabAddRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         app:fabSize="normal"
-        app:layout_constraintBottom_toTopOf="@+id/add_fab"
-        app:layout_constraintEnd_toEndOf="@+id/add_fab"
+        app:layout_constraintBottom_toTopOf="@+id/fabClose"
+        app:layout_constraintEnd_toEndOf="@+id/fabClose"
         android:backgroundTint="@color/pink"
         android:textColor="@color/white"
-        android:text="AJUKAN CUTI ATAU SAKIT"
+        android:text="@string/add_request"
         app:icon="@drawable/ic_pengajuan"
         app:iconTint="@color/white" />
 
-    <!--Action name text for the add alarm button-->
-    <!--Make sure that you are constraining this
-        Text to the add Alarm FAB button-->
 
-    <!--Floating action button for add person-->
-    <!--Make sure that you are constraining this button
-        to the add Alarm FAB button-->
-    <!--Make sure to add backgroundTint attribute to match
-         the entire application color-->
-    <!--because after changing the base application theme
-         the color of the FAB is set Blue as default-->
-
-    <!--Action name text for the add person button-->
-    <!--Make sure that you are constraining this Text
-         to the add Person FAB button-->
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/add_person_fab"
+        android:id="@+id/fabTakeAttendance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:backgroundTint="@color/pink"
-        android:text="ISI KEHADIRAN"
+        android:text="@string/take_attendance"
         android:textColor="@color/white"
         app:fabSize="normal"
         app:icon="@drawable/ic_done_all"
         app:iconTint="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/add_alarm_fab"
-        app:layout_constraintEnd_toEndOf="@+id/add_alarm_fab"
+        app:layout_constraintBottom_toTopOf="@+id/fabAddRequest"
+        app:layout_constraintEnd_toEndOf="@+id/fabAddRequest"
         app:layout_constraintHorizontal_bias="0.988"
-        app:layout_constraintStart_toStartOf="@+id/add_alarm_fab" />
+        app:layout_constraintStart_toStartOf="@+id/fabAddRequest" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

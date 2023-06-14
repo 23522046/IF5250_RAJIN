@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        tools:text="TERKIRIM"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvJenis"
+        style="@style/AppTheme.Subheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintStart_toEndOf="@+id/tvStatus"
+        app:layout_constraintTop_toTopOf="@+id/tvStatus"
+        tools:text="CUTI" />
+
+    <TextView
+        android:id="@+id/restaurantItemRating"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="@+id/tvJenis"
+        app:layout_constraintTop_toBottomOf="@+id/tvJenis" />
+
+    <TextView
+        android:id="@+id/tvMulai"
+        style="@style/AppTheme.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:textColor="@color/greyDisabled"
+        app:layout_constraintBottom_toBottomOf="@+id/restaurantItemRating"
+        app:layout_constraintStart_toEndOf="@+id/restaurantItemRating"
+        app:layout_constraintTop_toTopOf="@+id/restaurantItemRating"
+        tools:text="Mulai\t: 1 Jun 2023" />
+
+    <TextView
+        android:id="@+id/tvSelesai"
+        style="@style/AppTheme.Caption"
+        android:layout_width="314dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="140dp"
+        android:textColor="@color/greyDisabled"
+        app:layout_constraintBottom_toBottomOf="@+id/restaurantItemRating"
+        app:layout_constraintStart_toEndOf="@+id/restaurantItemRating"
+        app:layout_constraintTop_toTopOf="@+id/restaurantItemRating"
+        app:layout_constraintVertical_bias="1.0"
+        tools:text="Hingga\t: 13 Juni 2023" />
+
+    <TextView
+        android:id="@+id/tvDiajukan"
+        style="@style/AppTheme.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/greySecondary"
+        app:layout_constraintStart_toStartOf="@+id/restaurantItemRating"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantItemRating"
+        tools:text="Diajukan \t: 14 Juni 2023" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

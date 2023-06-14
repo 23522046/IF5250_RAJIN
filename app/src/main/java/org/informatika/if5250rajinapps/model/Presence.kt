@@ -2,11 +2,13 @@ package org.informatika.if5250rajinapps.model
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
+import org.informatika.if5250rajinapps.util.formattedDateOnly
+import org.informatika.if5250rajinapps.util.formattedTimeOnly
+import java.util.*
 
 data class Presence(
 
     var UID: String? = null,
-
     var jenis: String? = null,
     var ket: String? = null,
 
@@ -34,5 +36,36 @@ data class Presence(
         const val COLLECTION_NAME = "presensi"
         const val FIELD_TIME_CREATE = "time_create"
         const val FIELD_UID = "uid"
+    }
+
+    fun checkInTime() : String =  if (checkIn != null){ checkIn?.waktu?.formattedTimeOnly!! } else { "-" }
+
+    fun checkOutTime() : String {
+        if (checkOut!=null){
+            return checkOut!!.waktu!!.formattedTimeOnly
+        }
+        return "-"
+    }
+
+    fun timeCreateTime() : String {
+        if (timeCreate!=null){
+            return timeCreate!!.formattedDateOnly
+        }
+        return Date().formattedDateOnly
+    }
+
+    fun durasiKerja() : String {
+        if (checkOut!=null){
+            val startDate: Date = checkIn?.waktu!!.toDate()
+            val endDate: Date = checkOut!!.waktu!!.toDate()
+
+            val durationInMillis: Long = endDate.time - startDate.time
+            val hours: Long = durationInMillis / (1000 * 60 * 60)
+            val minutes: Long = durationInMillis / (1000 * 60) % 60
+            val seconds: Long = durationInMillis / 1000 % 60
+
+            return "$hours Jam, $minutes Menit"
+        }
+        return "-"
     }
 }

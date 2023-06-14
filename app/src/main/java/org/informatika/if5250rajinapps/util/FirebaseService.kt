@@ -1,15 +1,20 @@
 package org.informatika.if5250rajinapps.util
 
+import android.net.Uri
 import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.UploadTask
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import org.informatika.if5250rajinapps.model.Pengajuan
 import org.informatika.if5250rajinapps.model.Presence
 import org.informatika.if5250rajinapps.model.Staff
 import org.informatika.if5250rajinapps.model.UnitKerja
@@ -97,4 +102,35 @@ object FirebaseService {
 
         return documentReference.set(p)
     }
+
+    fun addPengajuan(p: Pengajuan): Task<Void> {
+        Log.d(TAG, "p: ${p.toString()}")
+        val firestore = FirebaseFirestore.getInstance()
+        var mAuth = FirebaseAuth.getInstance()
+
+        if (mAuth.currentUser==null) throw Exception("Anda belum login")
+
+        var documentReference = firestore.collection(Pengajuan.COLLECTION_NAME)
+            .document("${mAuth.currentUser!!.uid}_${p.sampaiTgl!!.toDate().formattedYMD}_${p.mulaiTgl!!.toDate().formattedYMD}_${p.uid}")
+
+        return documentReference.set(p)
+    }
+
+    fun uploadFotoPengajuan(imageUri: Uri, pengajuan: Pengajuan) : UploadTask{
+        // creating a storage reference
+        val storageRef = Firebase.storage.reference;
+
+        // val fileName = imageUri?.pathSegments?.last()
+
+        // extract the file name with extension
+//        val sd = getFileName(applicationContext, imageUri)
+        val sd = dokPendukungPath(pengajuan)
+
+        // Upload Task with upload to directory 'file'
+        // and name of the file remains same
+        val uploadTask = storageRef.child(sd).putFile(imageUri)
+
+        return uploadTask
+    }
+
 }

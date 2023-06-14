@@ -14,7 +14,7 @@
         android:scrollbars="vertical"
         app:layout_constraintTop_toBottomOf="@+id/til"
         tools:layout_editor_absoluteX="0dp"
-        tools:listitem="@layout/request_list_item" />
+        tools:listitem="@layout/presence_list_item" />
 
     <TextView
         android:visibility="gone"

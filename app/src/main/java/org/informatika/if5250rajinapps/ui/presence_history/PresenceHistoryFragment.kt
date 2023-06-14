@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
@@ -17,6 +18,7 @@ import com.google.firebase.ktx.Firebase
 import org.informatika.if5250rajinapps.R
 import org.informatika.if5250rajinapps.adapter.PresenceAdapter
 import org.informatika.if5250rajinapps.databinding.FragmentHistoryPresenceBinding
+import org.informatika.if5250rajinapps.model.Pengajuan
 import org.informatika.if5250rajinapps.model.Presence
 import org.informatika.if5250rajinapps.util.formattedYMD
 import java.text.SimpleDateFormat
@@ -27,14 +29,8 @@ class PresenceHistoryFragment : Fragment(), PresenceAdapter.OnPresenceSelectedLi
     lateinit var firestore: FirebaseFirestore
     private var query: Query? = null
     private var adapter: PresenceAdapter? = null
-
     private var _binding: FragmentHistoryPresenceBinding? = null
-
     private lateinit var viewModel:PresenceHistoryViewModel
-
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,7 +77,7 @@ class PresenceHistoryFragment : Fragment(), PresenceAdapter.OnPresenceSelectedLi
                 Calendar.MONTH)+1}-${cStart.get(Calendar.DATE)}")
             val end = SimpleDateFormat("yyyy-MM-dd").parse("${cEnd.get(Calendar.YEAR)}-${cEnd.get(
                 Calendar.MONTH)+1}-${cEnd.get(Calendar.DATE)}")
-            renderData2(start, end)
+            renderData(start, end)
 
 //            Toast.makeText(context, "${datePicker.headerText} is selected", Toast.LENGTH_LONG).show()
         }
@@ -116,69 +112,32 @@ class PresenceHistoryFragment : Fragment(), PresenceAdapter.OnPresenceSelectedLi
         viewModel =
             ViewModelProvider(this).get(PresenceHistoryViewModel::class.java)
 
-        // Enable Firestore logging
-        FirebaseFirestore.setLoggingEnabled(true)
-
-        renderData()
+        renderData(null, null)
     }
 
-    private fun renderData() {
+
+    private fun renderData(start: Date?, end: Date?) {
         // Firestore
         firestore = Firebase.firestore
+        val mAuth = Firebase.auth
 
-        val date = Date()
-        Log.d("PresenceHistoryFragment", "date : ${date.formattedYMD}")
-        // Get the 10 newest presence
-        query = firestore.collection(Presence.COLLECTION_NAME)
-            .orderBy(Presence.FIELD_TIME_CREATE, Query.Direction.DESCENDING)
-            .whereGreaterThanOrEqualTo(Presence.FIELD_TIME_CREATE, SimpleDateFormat("yyyy-MM-dd").parse(date.formattedYMD))
-            .limit(10)
+        if (start==null || end ==null){
+            val date = Date()
+            Log.d("PresenceHistoryFragment", "date : ${date.formattedYMD}")
+            // Get the 10 newest presence
+            query = firestore.collection(Presence.COLLECTION_NAME)
+                .orderBy(Presence.FIELD_TIME_CREATE, Query.Direction.DESCENDING)
+                .whereEqualTo(Presence.FIELD_UID, mAuth.uid)
+                .whereGreaterThanOrEqualTo(Presence.FIELD_TIME_CREATE, SimpleDateFormat("yyyy-MM-dd").parse(date.formattedYMD))
 
-        query!!.get().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val result = task.result
-                result?.let {
-                    result.documents.mapNotNull { snapshot ->
-                        Log.d("PresenceFragment", "snapshot = ${snapshot["staff_id"]}")
-                        val p = snapshot.toObject(Presence::class.java)
-                        Log.d("PresenceFragment", p.toString())
-                    }
-                }
-            } else {
-                task.exception?.let { Log.e("PresenceFragment", it.stackTraceToString()) }
-            }
+        } else {
+            // Get the 10 newest presence
+            query = firestore.collection(Presence.COLLECTION_NAME)
+                .orderBy(Presence.FIELD_TIME_CREATE, Query.Direction.DESCENDING)
+                .whereEqualTo(Presence.FIELD_UID, mAuth.uid)
+                .whereGreaterThanOrEqualTo(Presence.FIELD_TIME_CREATE, start)
+                .whereLessThanOrEqualTo(Presence.FIELD_TIME_CREATE, end)
         }
-
-
-        // Recyclerview
-        query?.let {
-            Log.d("PresenceFragment", "here")
-
-            adapter = PresenceAdapter(it, this@PresenceHistoryFragment)
-
-            Log.d("PresenceFragment", "here 97")
-            binding.recyclerView.adapter = adapter
-        }
-
-        binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.addItemDecoration(
-            DividerItemDecoration(
-                requireContext(),
-                LinearLayoutManager.VERTICAL
-                )
-            )
-    }
-
-    private fun renderData2(start: Date, end: Date) {
-        // Firestore
-        firestore = Firebase.firestore
-
-        // Get the 10 newest presence
-        query = firestore.collection(Presence.COLLECTION_NAME)
-            .orderBy(Presence.FIELD_TIME_CREATE, Query.Direction.DESCENDING)
-            .whereGreaterThanOrEqualTo(Presence.FIELD_TIME_CREATE, start)
-            .whereLessThanOrEqualTo(Presence.FIELD_TIME_CREATE, end)
-            .limit(10)
 
         query!!.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -212,9 +171,6 @@ class PresenceHistoryFragment : Fragment(), PresenceAdapter.OnPresenceSelectedLi
 
     override fun onStart() {
         super.onStart()
-
-
-
         // Start listening for Firestore updates
         adapter?.startListening()
     }
@@ -228,7 +184,6 @@ class PresenceHistoryFragment : Fragment(), PresenceAdapter.OnPresenceSelectedLi
         super.onDestroyView()
         _binding = null
     }
-
 
 
     override fun onPresenceSelected(presence: Presence) {

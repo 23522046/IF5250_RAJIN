@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_submission"
-        android:name="org.informatika.if5250rajinapps.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:name="org.informatika.if5250rajinapps.ui.request_history.RequestHistoryFragment"
+        android:label="@string/title_request"
+        tools:layout="@layout/fragment_history_request" />
 </navigation>

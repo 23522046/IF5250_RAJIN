@@ -17,7 +17,7 @@
         android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Selamat datang, silahkan login"
+        android:text="@string/welcome_msg"
         android:textSize="20sp"
 
         android:layout_below="@id/imageViewLogo"
@@ -45,7 +45,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username"
+                android:hint="@string/username"
                 app:startIconDrawable="@drawable/ic_person"
                 >
 
@@ -62,7 +62,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
+                android:hint="@string/password"
                 app:startIconDrawable="@drawable/ic_key"
                 app:endIconMode="password_toggle"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
@@ -89,7 +89,7 @@
                 android:id="@+id/buttonLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Login"
+                android:text="@string/login"
                 android:textSize="18sp"
                 android:textColor="@android:color/white"
                 android:layout_marginTop="20dp"/>
@@ -100,7 +100,7 @@
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Lupa password? Reset di sini"
+                android:text="@string/forgot_password"
                 android:textColor="@android:color/holo_blue_dark"
                 />
         </LinearLayout>
