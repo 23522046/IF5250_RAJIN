@@ -398,6 +398,9 @@ class TakeAttendanceActivity : AppCompatActivity(), OnMapReadyCallback,
                 val latLng = LatLng(p.latitude, p.longitude)
                 polylines.add(latLng)
             }
+            if (!w.polygons!!.isEmpty()){
+                polylines.add(LatLng(w.polygons!![0].latitude, w.polygons!![0].longitude))
+            }
 
             val polylineOptions = PolylineOptions().addAll(polylines).color(Color.RED).width(5f)
             polylineOptionsList.add(polylineOptions)
@@ -415,6 +418,9 @@ class TakeAttendanceActivity : AppCompatActivity(), OnMapReadyCallback,
             for (p in w.polygons!!) {
                 val latLng = LatLng(p.latitude, p.longitude)
                 polygon.add(latLng)
+            }
+            if (!w.polygons!!.isEmpty()){
+                polygon.add(LatLng(w.polygons!![0].latitude, w.polygons!![0].longitude))
             }
 
             polygons.add(polygon)

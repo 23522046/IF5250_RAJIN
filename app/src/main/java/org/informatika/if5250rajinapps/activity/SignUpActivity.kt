@@ -62,7 +62,9 @@ class SignUpActivity : AppCompatActivity() {
             }
         }
 
-        binding.autoCompleteInstansi.setOnItemClickListener { adapterView, view, i, l -> selectedUnitKerja = listUnitKerja[i] }
+        binding.autoCompleteInstansi.setOnItemClickListener {
+                adapterView, view, i, l -> selectedUnitKerja = listUnitKerja[i]
+        }
 
         binding.buttonSubmit.setOnClickListener {
             try {
