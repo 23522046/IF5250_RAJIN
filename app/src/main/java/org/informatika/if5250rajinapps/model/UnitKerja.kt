@@ -4,6 +4,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.PropertyName
 
 data class UnitKerja (
+    var idDoc: String? = null,
     var level: String? = null,
     var nama: String? = null,
     var parent: DocumentReference? = null,
@@ -13,7 +14,7 @@ data class UnitKerja (
 ) {
 
     override fun toString(): String {
-        return "level : $level, nama : $nama, batas_wilayah : $batasWilayah"
+        return "$nama"
     }
 
     companion object {

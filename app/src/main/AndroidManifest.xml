@@ -19,10 +19,12 @@
         android:theme="@style/Theme.IF5250RajinApps"
         tools:targetApi="31">
         <activity
+            android:name=".activity.SignUpActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.RequestActivity"
             android:exported="false"
-            android:label="Request Activity"
-            />
+            android:label="Request Activity" />
 
         <service
             android:name=".service.ForegroundOnlyLocationService"

@@ -45,7 +45,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/username"
+                android:hint="@string/email"
                 app:startIconDrawable="@drawable/ic_person"
                 >
 
@@ -96,11 +96,11 @@
 
             <TextView
                 android:textAlignment="center"
-                android:id="@+id/tvLupaPass"
+                android:id="@+id/tvSignUp"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/forgot_password"
+                android:text="Belum punya akun? Registrasi"
                 android:textColor="@android:color/holo_blue_dark"
                 />
         </LinearLayout>

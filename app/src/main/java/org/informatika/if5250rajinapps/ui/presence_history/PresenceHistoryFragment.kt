@@ -124,13 +124,13 @@ class PresenceHistoryFragment : Fragment(), PresenceAdapter.OnPresenceSelectedLi
         if (start==null || end ==null){
             val date = Date()
             Log.d("PresenceHistoryFragment", "date : ${date.formattedYMD}")
-            // Get the 10 newest presence
-            query = firestore.collection(Presence.COLLECTION_NAME)
-                .orderBy(Presence.FIELD_TIME_CREATE, Query.Direction.DESCENDING)
-                .whereEqualTo(Presence.FIELD_UID, mAuth.uid)
-                .whereGreaterThanOrEqualTo(Presence.FIELD_TIME_CREATE, SimpleDateFormat("yyyy-MM-dd").parse(date.formattedYMD))
+                // Get the 10 newest presence
+                query = firestore.collection(Presence.COLLECTION_NAME)
+                    .orderBy(Presence.FIELD_TIME_CREATE, Query.Direction.DESCENDING)
+                    .whereEqualTo(Presence.FIELD_UID, mAuth.uid)
+                    .whereGreaterThanOrEqualTo(Presence.FIELD_TIME_CREATE, SimpleDateFormat("yyyy-MM-dd").parse(date.formattedYMD))
 
-        } else {
+            } else {
             // Get the 10 newest presence
             query = firestore.collection(Presence.COLLECTION_NAME)
                 .orderBy(Presence.FIELD_TIME_CREATE, Query.Direction.DESCENDING)
@@ -148,6 +148,8 @@ class PresenceHistoryFragment : Fragment(), PresenceAdapter.OnPresenceSelectedLi
                         val p = snapshot.toObject(Presence::class.java)
                         Log.d("PresenceFragment", p.toString())
                     }
+
+                    if (result.documents.isEmpty()) showRecyclerView() else hideRecyclerView()
                 }
             } else {
                 task.exception?.let { Log.e("PresenceFragment", it.stackTraceToString()) }
@@ -167,6 +169,18 @@ class PresenceHistoryFragment : Fragment(), PresenceAdapter.OnPresenceSelectedLi
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         adapter?.startListening()
+    }
+
+    private fun hideRecyclerView() {
+        binding.recyclerView.visibility = View.VISIBLE
+        binding.tvTidakAdaData.visibility = View.GONE
+        binding.ivNoData.visibility = View.GONE
+    }
+
+    private fun showRecyclerView() {
+        binding.recyclerView.visibility = View.GONE
+        binding.tvTidakAdaData.visibility = View.VISIBLE
+        binding.ivNoData.visibility = View.VISIBLE
     }
 
     override fun onStart() {

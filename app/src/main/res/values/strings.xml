@@ -40,4 +40,11 @@
     <string name="work_day">Hari Kerja</string>
     <string name="time_in">Jam Masuk</string>
     <string name="time_out">Jam Pulang</string>
+    <string name="email">Email</string>
+    <string name="nama_lengkap">Nama Lengkap</string>
+    <string name="re_type_password">Re-type Password</string>
+    <string name="no_induk_pegawai">No Induk Pegawai</string>
+    <string name="masukkan_kode_bergabung_terlebih_dahulu">Masukkan Kode Bergabung Terlebih Dahulu</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sudah_punya_akun_login_di_sini">Sudah punya akun? Login di sini</string>
 </resources>

@@ -73,6 +73,9 @@ class RequestHistoryFragment : Fragment(), RequestAdapter.OnRequestSelectedListe
                         val p = snapshot.toObject(Pengajuan::class.java)
                         Log.d("RequestHistoryFragment", "Pengajuan : $p")
                     }
+
+                    if (result.documents.isEmpty()) showRecyclerView() else hideRecyclerView()
+
                 }
             } else {
                 task.exception?.let { Log.e("RequestHistoryFragment", it.stackTraceToString()) }
@@ -110,6 +113,18 @@ class RequestHistoryFragment : Fragment(), RequestAdapter.OnRequestSelectedListe
 
     override fun onRequestSelected(pengajuan: Pengajuan) {
         Snackbar.make(binding.root, "Request selected", Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun hideRecyclerView() {
+        binding.recyclerView.visibility = View.VISIBLE
+        binding.tvTidakAdaData.visibility = View.GONE
+        binding.ivNoData.visibility = View.GONE
+    }
+
+    private fun showRecyclerView() {
+        binding.recyclerView.visibility = View.GONE
+        binding.tvTidakAdaData.visibility = View.VISIBLE
+        binding.ivNoData.visibility = View.VISIBLE
     }
 
 

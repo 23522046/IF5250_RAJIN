@@ -6,6 +6,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
@@ -14,10 +15,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
-import org.informatika.if5250rajinapps.model.Pengajuan
-import org.informatika.if5250rajinapps.model.Presence
-import org.informatika.if5250rajinapps.model.Staff
-import org.informatika.if5250rajinapps.model.UnitKerja
+import org.informatika.if5250rajinapps.model.*
 import java.util.*
 
 object FirebaseService {
@@ -72,6 +70,34 @@ object FirebaseService {
         } catch (e: Exception){
             Log.e(TAG, "Error getting unit_kerja", e)
             null
+        }
+    }
+
+    suspend fun getUnitKerja(idDoc: String): UnitKerja? {
+        val db = FirebaseFirestore.getInstance()
+        return try {
+            db.collection(UnitKerja.COLLECTION_NAME).document(idDoc).get().await().toObject(UnitKerja::class.java)
+        } catch (e: Exception){
+            Log.e(TAG, "Error getting unit_kerja", e)
+            null
+        }
+    }
+
+    suspend fun getListUnitKerja(parent: String): List<UnitKerja?> {
+        val db = FirebaseFirestore.getInstance()
+        return try {
+            val docParent = db.collection(UnitKerja.COLLECTION_NAME).document(parent)
+            db.collection(UnitKerja.COLLECTION_NAME)
+                .orderBy("nama", Query.Direction.ASCENDING)
+                .whereEqualTo("parent", docParent).get()
+                .await().documents.mapNotNull {
+                    val unitKerja = it.toObject(UnitKerja::class.java)
+                    unitKerja!!.idDoc = it.id
+                    unitKerja
+                }
+        } catch (e: Exception){
+            Log.e(TAG, "Error getting unit_kerja", e)
+            listOf<UnitKerja>()
         }
     }
 
@@ -131,6 +157,29 @@ object FirebaseService {
         val uploadTask = storageRef.child(sd).putFile(imageUri)
 
         return uploadTask
+    }
+
+    suspend fun registerStaff(u: User, s: Staff): Staff? {
+        Log.d(TAG, "s: $s")
+        val firestore = FirebaseFirestore.getInstance()
+        val mAuth = FirebaseAuth.getInstance()
+
+        return try{
+            mAuth.createUserWithEmailAndPassword(u.username, u.password).await()
+
+            val documentReference = firestore.collection(Staff.COLLECTION_NAME)
+                .document(mAuth.uid!!)
+
+            if (mAuth.uid==null) throw Exception("Registrasi gagal")
+
+            s.UID = mAuth.uid!!
+            documentReference.set(s)
+
+            return documentReference.get().await().toObject(Staff::class.java)
+        } catch (e: Exception){
+            Log.e(TAG, "Error register staff", e)
+            null
+        }
     }
 
 }

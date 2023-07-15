@@ -139,7 +139,7 @@ class TakeAttendanceActivity : AppCompatActivity(), OnMapReadyCallback,
 
         requestLocationUpdate()
 
-        viewModel.presensi.observe(this) {
+            viewModel.presensi.observe(this) {
             Log.d(TAG, "presensi : $it")
             binding.btPresensi.text = "MASUK"
             if (it != null) {
@@ -162,7 +162,6 @@ class TakeAttendanceActivity : AppCompatActivity(), OnMapReadyCallback,
 
     private fun actionPresensi() {
 
-        // TODO: salah jangan diobserve, jadi update koding terus blFok
         val it = viewModel.presensi.value
         if (it == null) {
             var mAuth = FirebaseAuth.getInstance()

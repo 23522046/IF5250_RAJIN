@@ -56,6 +56,13 @@ class MainActivity : AppCompatActivity() {
                 ).show()
             }
         }
+
+        binding.tvSignUp.setOnClickListener { moveToSignUpActivity() }
+    }
+
+    private fun moveToSignUpActivity() {
+        val intent = Intent(this, SignUpActivity::class.java)
+        startActivity(intent)
     }
 
     private fun loginUserAccount(username: String, password: String) {

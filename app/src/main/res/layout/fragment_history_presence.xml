@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:visibility="visible"
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,6 +16,13 @@
         app:layout_constraintTop_toBottomOf="@+id/til"
         tools:layout_editor_absoluteX="0dp"
         tools:listitem="@layout/request_list_item" />
+
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/ivNoData"
+        android:src="@drawable/no_data"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"/>
 
     <TextView
         android:visibility="gone"
@@ -30,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Tidak Ada Data"
+        android:text="Belum Ada Data"
         />
 
     <ProgressBar
